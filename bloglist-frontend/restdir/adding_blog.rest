@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlRhY2l0dXNVc2VyIiwiaWQiOiI2M2Y3NmE4NmMyNDIzNDM4Nzg4Y2YyNjIiLCJpYXQiOjE2NzcyNDY3NDZ9.FnKC9ts_3YBu0HzD6Ovj_ymXa0UPZEmDD5C0CMu1UIQ
+
+{
+    "title": "Tacituksen blogi 2",
+    "author": "Tacitus",
+    "url": "http://tacitusUrl",
+    "likes": 2000
+}
