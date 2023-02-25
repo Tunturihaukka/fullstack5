@@ -15,7 +15,7 @@ const App = () => {
   const [loginVisible, setLoginVisible] = useState(false)
   const [blogVisible, setBlogVisible] = useState (false)
 
-  const [visibilityMap, setVisibilityMap] = useState(new Map())
+  //const [visibilityMap, setVisibilityMap] = useState(new Map())
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -31,7 +31,7 @@ const App = () => {
       }
 
       setBlogs( fetchedBlogs.sort(blogCompar) )
-      setVisibilityMap(new Map(mapBlogs(blogs)))
+      //setVisibilityMap(new Map(mapBlogs(blogs)))
     }
     fetchBlogs()
       .catch(console.exception)
@@ -46,6 +46,7 @@ const App = () => {
     }
   }, [])
 
+  /*
   const mapBlogs = (blogsToMap) => {
     const blogMap = blogsToMap.reduce(
       (mappedBlogs, blog) => {
@@ -56,6 +57,7 @@ const App = () => {
     )
     return blogMap
   }
+  */
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -137,6 +139,7 @@ const App = () => {
     )
   }
 
+  /*
   const handleViewClick = (id) => {
     setVisibilityMap(new Map(visibilityMap.set(id, true)))
   }
@@ -144,12 +147,15 @@ const App = () => {
   const handleCancelClick = (id) => {
     setVisibilityMap(new Map(visibilityMap.set(id, false)))
   }
+  */
 
   const initBlog = (blog) => {
     const values = {
       blog: blog,
-      hidefunc: handleCancelClick,
-      handleLike: handleLike
+      user: user,
+      //hidefunc: handleCancelClick,
+      handleLike: handleLike,
+      confirm: confirm
     }
     return (
       <Blog values={values}/>
@@ -208,18 +214,7 @@ const App = () => {
       <ul>
         {blogs.map(blog =>
           <li key={blog.id}>
-            <div className="container">
-              <div style={{ display: visibilityMap.get(blog.id) ? 'none' : '' }}>
-                {blog.title} {blog.author}&nbsp;
-                <button onClick={() => handleViewClick(blog.id)}>view</button>
-              </div>
-            </div>
-            <div style={{ display: visibilityMap.get(blog.id) ? '' : 'none' }}>
-              {initBlog(blog)}
-              <div style={{ display: user.id === blog.user.id ? '': 'none' }}>
-                <button onClick={() => confirm(blog)}>remove</button>
-              </div>
-            </div>
+            {initBlog(blog)}
           </li>
         )}
       </ul>

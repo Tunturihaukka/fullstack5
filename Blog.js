@@ -2,10 +2,10 @@ import '../index.css'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 
+const [visibility, setVisibility] = useState(false)
+
 const Blog = ({ values }) => {
   const { blog, user, handleLike, confirm } = values
-
-  const [visibility, setVisibility] = useState(false)
 
   const updatedBlog = {
     id: blog.id,
@@ -23,7 +23,6 @@ const Blog = ({ values }) => {
   const showContents = () => {
     setVisibility(true)
   }
-
 
   return(
     <div>
@@ -47,8 +46,8 @@ const Blog = ({ values }) => {
         <div>
           <strong>The blog was added by: </strong> {blog.user.username}
         </div>
-        <div style = {{ display: blog.user.id === user.id ? '' : 'none' }}>
-          <button onClick={() => confirm(blog)}>remove</button>
+        <div style = {{ display: blog.id === user.id ? '' : 'none' }}>
+          <button onClick={() => confirm()}>remove</button>
         </div>
       </div>
     </div>
