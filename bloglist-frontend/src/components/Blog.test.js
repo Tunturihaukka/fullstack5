@@ -31,6 +31,7 @@ beforeEach(() => {
   container = render(initBlog(testBlog)).container
 })
 
+
 test('clicking the "like" button twice calss event handler twice', async () => {
   const user = userEvent.setup()
   const button = screen.getByText('like')

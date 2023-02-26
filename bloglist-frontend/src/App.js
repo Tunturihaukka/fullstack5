@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
+import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -42,7 +44,6 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      console.log('token set')
       blogService.setToken(user.token)
     }
   }, [])
@@ -90,11 +91,11 @@ const App = () => {
     try {
       window.localStorage.clear()
       setMessage('successfully logged out')
-      setUser(null)
-      loginService.setToken(null)
       setTimeout(() => {
         setMessage(null)
       }, 5000)
+      setUser(null)
+      loginService.setToken(null)
     } catch (exception) {
       //next(exception)
     }
@@ -117,6 +118,7 @@ const App = () => {
 
   }
 
+  /*
   const createBlogForm = () => {
     const formObject = {
       setMessage : setMessage,
@@ -127,6 +129,7 @@ const App = () => {
       formObject
     )
   }
+  */
 
   const createLoginForm = () => {
     const formObject = {
@@ -134,8 +137,7 @@ const App = () => {
       setPassword : setPassword,
       handleLogin : handleLogin,
       username : username,
-      password : password,
-      message : message
+      password : password
     }
     return (
       formObject
@@ -185,6 +187,25 @@ const App = () => {
     }
   }
 
+  const createBlog = async (title, author, url) => {
+    //console.log(props)
+    const result = await blogService.create({
+      title: title,
+      author: author,
+      url: url
+      //likes: 1000
+    })
+    setMessage(
+      `a new blog: ${title} by: ${author} was added`
+    )
+    setBlogVisible(false)
+    updateBlogs()
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+    return result
+  }
+
 
   if (user === null) {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
@@ -192,11 +213,15 @@ const App = () => {
     return (
       <div>
         <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
           <Notification message={message} />
+          <button onClick={() => setLoginVisible(true)}>log in</button>
         </div>
         <div style = {showWhenVisible}>
-          <LoginForm {...createLoginForm()}/>
+          <div>
+            <h2>Log in to application</h2>
+            <Notification message={message} />
+            <LoginForm {...createLoginForm()}/>
+          </div>
           <button onClick={() => setLoginVisible(false)}>cancel</button>
         </div>
       </div>
@@ -226,108 +251,9 @@ const App = () => {
         <button onClick={() => setBlogVisible(true)}>create new blog</button>
       </div>
       <div style={showWhenVisible}>
-        <BlogForm {...createBlogForm()}/>
+        <BlogForm createBlog = {createBlog}/>
         <button onClick={() => setBlogVisible(false)}>cancel</button>
       </div>
-    </div>
-  )
-}
-const BlogForm = ({
-  setMessage,
-  setBlogVisible,
-  updateBlogs
-}) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
-  const handleNewBlog = async (event) => {
-    event.preventDefault()
-    try {
-      await blogService.create({
-        title: title,
-        author: author,
-        url: url
-        //likes: 1000
-      })
-      setMessage(
-        `a new blog: ${title} by: ${author} was added`
-      )
-      setTimeout(() => {
-        setMessage(null)
-      }, 5000)
-      setBlogVisible(false)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      updateBlogs()
-    } catch (exception) {
-      //
-    }
-  }
-
-  return (
-    <form onSubmit={handleNewBlog}>
-      <div>
-          title:
-        <input
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-          author:
-        <input
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-          url:
-        <input
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-
-      <button type="submit">add</button>
-    </form>
-  )
-}
-
-const LoginForm = ({
-  setUsername,
-  setPassword,
-  handleLogin,
-  username,
-  password,
-  message
-}) => {
-  return (
-    <div>
-      <h2>Log in to application</h2>
-      <Notification message={message} />
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
     </div>
   )
 }
