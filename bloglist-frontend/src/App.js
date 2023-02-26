@@ -42,6 +42,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      console.log('token set')
       blogService.setToken(user.token)
     }
   }, [])
@@ -70,6 +71,7 @@ const App = () => {
         'loggedBlogappUser', JSON.stringify(userResponse)
       )
       setUser(userResponse)
+      blogService.setToken(userResponse.token)
       setMessage(`successfully logged in as ${userResponse.username}`)
       setTimeout(() => {
         setMessage(null)
@@ -89,6 +91,7 @@ const App = () => {
       window.localStorage.clear()
       setMessage('successfully logged out')
       setUser(null)
+      loginService.setToken(null)
       setTimeout(() => {
         setMessage(null)
       }, 5000)

@@ -27,13 +27,11 @@ const Blog = ({ values }) => {
 
   return(
     <div>
-      <div style = {{ display: visibility ? 'none' : '' }}>
-        <div className="container">
-          {blog.title} {blog.author}&nbsp;
-          <button onClick={() => showContents()}>show</button>
-        </div>
+      <div className="container" style = {{ display: visibility ? 'none' : '' }}>
+        {blog.title} {blog.author}&nbsp;
+        <button onClick={() => showContents()}>show</button>
       </div>
-      <div style = {{ display: visibility ? '' : 'none' }}>
+      <div className="regular" style = {{ display: visibility ? '' : 'none' }}>
         <div className="container">
           {blog.title} {blog.author}&nbsp;
           <button onClick={() => hideContents()}>hide</button>
