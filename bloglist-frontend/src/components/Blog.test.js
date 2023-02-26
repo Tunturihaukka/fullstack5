@@ -12,11 +12,12 @@ const testBlog = {
   user: 'CiceroUser'
 }
 
+const mockHandler = jest.fn()
 const initBlog = (blog) => {
   const values = {
     blog: blog,
     user: true,
-    handleLike: true,
+    handleLike: mockHandler,
     confirm: true
   }
   return (
@@ -28,6 +29,15 @@ let container
 
 beforeEach(() => {
   container = render(initBlog(testBlog)).container
+})
+
+test('clicking the "like" button twice calss event handler twice', async () => {
+  const user = userEvent.setup()
+  const button = screen.getByText('like')
+  await user.click(button)
+  await user.click(button)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })
 
 test('clicking the "show" button shows the content', async () => {
